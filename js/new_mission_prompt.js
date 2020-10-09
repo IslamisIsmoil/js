@@ -135,43 +135,43 @@ function admin_panel() {
         document.write( "<th><button id='deleteUser" + i + "' class=\"btn__remove\">x</button></th>" );
         document.write( "</tr>" );        
     }
-    document.write( "</table>" );
-    
-
-    document.addEventListener('click',function(e) {
-        for ( i in users ) {
-            if(e.target && e.target.id == 'deleteUser' + i ){
-                let element = e.target;
-                let parent = element.parentElement;
-                let pro_parent = parent.parentElement;
-                pro_parent.remove();
-                localStorage.removeItem(users[i]);
-            } 
-            if ( e.target && e.target.id == 'admin_p' ){
-                admin_panel();console.log(e);
-            } 
-            if ( e.target && e.target.id == 'logout'){
-                log_out();clearPage();start_page();
-            } 
-            if ( e.target && e.target.id == 'score'){
-                clearPage(); score();
-            }
-            if ( e.target && e.target.id == 'start_signup'){
-                clearPage(); forms();
-            }
-            if ( e.target && e.target.id == 'start_signin'){
-                clearPage(); forms_in();
-            }
-        }
-    });
-    
+    document.write( "</table>" );    
 }
+
+document.addEventListener('click',function(e) {
+    let users = Object.keys( localStorage );
+    for ( i in users ) {
+        if(e.target && e.target.id == 'deleteUser' + i ){
+            let element = e.target;
+            let parent = element.parentElement;
+            let pro_parent = parent.parentElement;
+            pro_parent.remove();
+            localStorage.removeItem(users[i]);
+        } 
+    }
+    if ( e.target && e.target.id == 'admin_p' ){
+        admin_panel();console.log(e);
+    } 
+    if ( e.target && e.target.id == 'logout'){
+        log_out();clearPage();start_page();
+    } 
+    if ( e.target && e.target.id == 'score'){
+        clearPage(); score();
+    }
+    if ( e.target && e.target.id == 'start_signup'){
+        clearPage(); forms();
+    }
+    if ( e.target && e.target.id == 'start_signin'){
+        clearPage(); forms_in();
+    }
+});
 
 function sign_up(){
     login_name          = String(document.getElementById('login_name').value);
     login_email         = String(document.getElementById('login_email').value);
     login_password      = String(document.getElementById('login_password').value);
-    let storage         = localStorage;
+    let storage         = localStorage,
+        email_v         = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     // checking login is unique
     if ( storage.getItem( login_name ) === null ){
@@ -185,9 +185,11 @@ function sign_up(){
         console.log( 'new user added!' );
         resetGame();
     }
-    else {
+    if ( storage.getItem( login_name ) !== null ) {
         alert( 'Login name not unique!' );
-        return false;
+    }
+    if ( !login_email.match( email_v ) ) {
+        alert( "Email is not valid!" );
     }
 }
 let log_out = () => {return localStorage.removeItem( Object.keys(localStorage)[0] );}
