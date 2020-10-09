@@ -187,11 +187,11 @@ function sign_up(){
     }
     // checking login is unique
     if ( storage.getItem( login_name ) !== null ) {
-        alert( 'Login name not unique!' );
+        alert( 'Login name not unique!' );return false;
     }
     
     else {
-        alert( "Email is not valid!" );
+        alert( "Email is not valid!" );return false;
     }
 }
 let log_out = () => {return localStorage.removeItem( Object.keys(localStorage)[0] );}
