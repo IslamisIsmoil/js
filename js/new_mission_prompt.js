@@ -175,8 +175,6 @@ function sign_up(){
     login_email         = String(document.getElementById('login_email').value);
     login_password      = String(document.getElementById('login_password').value);
     let storage         = localStorage;
-
-    
     // checking login is unique
     if ( storage.getItem( login_name ) !== null ) {
         alert( 'Login name not unique!' );
@@ -212,13 +210,15 @@ function sign_in(){
     login_password      = String(document.getElementById('login_password').value);
     let storage         = localStorage;
     // cheking admin
-    if ( login_name == admin_name ){ clearPage();nav(); }
+    if ( login_name == admin_name ){ clearPage();nav();admin_panel(); }
     // checking login name is exist
     if ( storage.getItem( last_login_name ) !== null ) {
-        clearPage();start_page();console.log( 'OK!' );
+        clearPage();nav();console.log( 'OK!' );
     } else { console.log( "User not found!" ); }
 }
 // *for get keys from localStorage
 let keys_of_storage = Object.keys( localStorage );
 console.log( keys_of_storage );
 const remove_all = () => { localStorage.clear(); };
+
+start_page();
