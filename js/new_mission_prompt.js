@@ -11,125 +11,7 @@ let admin_name = admin_data.name;
 let admin_password = admin_data.password;
 let login_name, login_email, login_password;
 
-function forms(){
-    document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
-    document.write( "<form name=\"myForm\" class=\"form\" method=\"post\">" );
-    document.write( "<div class=\"form__text\">Login</div>" );
-    document.write( "<input class=\"form__input\" placeholder=\"Enter your login\" type=\"text\" id=\"login_name\"></input>" );
-    document.write( "<div class=\"form__text\">Email</div>" );
-    document.write( "<input class=\"form__input\" placeholder=\"Enter your email\" type=\"text\" id=\"login_email\"></input>" );
-    document.write( "<div class=\"form__text\">Password</div>" );
-    document.write( "<input class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
-    document.write( "<br><button type=\"submit\" href=\"#\" onclick=\"sign_up();\" class=\"form__btn\">Sign Up</button>" );
-}
 
-function nav(){
-    document.write("<nav class=\"menu\"><ul class=\"menu__list\">");
-    document.write("<li class=\"menu\"><a class=\"menu__link\">" + 
-    Object.keys(localStorage)[0] );
-    document.write( "<ul class=\"sub-menu-list\">" );
-    document.write( "<li class=\"menu\"><a class=\"menu__link\" href='#' id=\"logout\">logout</a></li>" );
-    document.write( "<li class=\"menu\"><a href='#' id=\"score\" class=\"menu__link\">my score</a></li>" );
-    if ( login_name == admin_name && login_password == admin_password ) {
-        document.write( "<li class=\"menu\"><a href='#' id=\"admin_p\" class=\"menu__link\">admin panel</a></li>" );
-    }
-    document.write( "</ul></a></li>" );
-    document.write( "</ul></li>" );
-
-    document.getElementById( "logout" ).addEventListener( 'click', (e) => { log_out(); forms(); } );
-    document.getElementById( "score" ).addEventListener( 'click', (e) => { score(); } );
-    document.getElementById( "admin_p" ).addEventListener( 'click', (e) => { admin_panel(); console.log(e); });
-}
-
-function score(){
-    nav();
-    clearPage();
-    document.write( "<div> class='score'" );
-    document.write( "<h1 class=\"score__text\">" + `${user_score}:${bot_score}` + "</h1>" );
-    document.write( "<button class=\"score__btn\" onclick=\"resetGame();\"></button>" );
-    document.write( "</div>" );
-}
-
-function start_page() {
-    nav();
-    forms();
-}
-start_page();
-function admin_panel() {
-    document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
-    let users = Object.keys( localStorage );
-    document.write( "<table class=\"table\">" );
-    document.write( "<tr>" );
-    document.write( "<th class=\"table__text\">Users</th>" );
-    document.write( "<th class=\"table__text table__remove\">remove</th>" );
-    document.write( "</tr>" );
-
-    for ( i in users ) {
-        document.write( "<tr>" );
-        document.write( "<td class=\"table__users\">" + users[i] + "</td>" );
-        document.write( "<th><button id='deleteUser" + i + "' class=\"btn__remove\">x</button></th>" );
-        document.write( "</tr>" );        
-    }
-    document.write( "</table>" );
-    
-
-    document.addEventListener('click',function(e) {
-        for ( i in users ) {
-            if(e.target && e.target.id == 'deleteUser' + i ){
-                let element = e.target;
-                let parent = element.parentElement;
-                let pro_parent = parent.parentElement;
-                pro_parent.remove();
-                localStorage.removeItem(users[i]);
-            }
-        }
-    });
-    
-}
-
-function sign_up(){
-    login_name          = String(document.getElementById('login_name').value);
-    login_email         = String(document.getElementById('login_email').value);
-    login_password      = String(document.getElementById('login_password').value);
-    let storage         = localStorage;
-    // checking login is unique
-    if ( storage.getItem( login_name ) === null || storage.getItem( login_name ) === admin_name ){
-        let new_user = new Object;
-        new_user['login_n']       = login_name;
-        new_user['login_email']   = login_email;
-        new_user['login_password']= login_password;
-        new_user['date']          = current_date;
-        // ! u can set objects only json format to localStorage.
-        storage.setItem( login_name, JSON.stringify( new_user ) );
-        console.log( 'new user added!' );
-        return false;
-    }
-    // checking admin 
-    // if ( storage.getItem( login_name ) === admin )
-    else {
-        alert( 'Login name not unique!' );
-        return false;
-    }
-}
-function log_out(){
-    return localStorage.removeItem( Object.keys(localStorage)[0] );
-}
-function sign_in(){
-    let last_login_name     = prompt( 'login' ),
-        storage             = localStorage;
-    // checking login name is exist
-    if ( storage.getItem( last_login_name ) !== null ) {
-        // ...
-        console.log( 'OK!' );
-    } else {
-        console.log( "User not found!" );
-    }
-}
-// *for get keys from localStorage
-let keys_of_storage = Object.keys( localStorage );
-console.log( keys_of_storage );
-// sign_up();
-const remove_all = () => { localStorage.clear(); };
 ////////////////////////////////////////////////////////////////////////////////
 let game_over, chance = 1, start_q, change_over,
     r_n, confirming, user_score = 0, bot_score = 0;
@@ -186,3 +68,127 @@ function start_game() {
         }
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+function forms(){
+    document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
+    document.write( "<form name=\"myForm\" class=\"form\" method=\"post\">" );
+    document.write( "<div class=\"form__text\">Login</div>" );
+    document.write( "<input class=\"form__input\" placeholder=\"Enter your login\" type=\"text\" id=\"login_name\"></input>" );
+    document.write( "<div class=\"form__text\">Email</div>" );
+    document.write( "<input class=\"form__input\" placeholder=\"Enter your email\" type=\"text\" id=\"login_email\"></input>" );
+    document.write( "<div class=\"form__text\">Password</div>" );
+    document.write( "<input class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
+    document.write( "<br><button type=\"submit\" href=\"#\" onclick=\"sign_up();\" class=\"form__btn\">Sign Up</button>" );
+}
+
+function nav(){
+    document.write("<nav class=\"menu\"><ul class=\"menu__list\">");
+    document.write("<li class=\"menu\"><a class=\"menu__link\">" + 
+    Object.keys(localStorage)[0] );
+    document.write( "<ul class=\"sub-menu-list\">" );
+    document.write( "<li class=\"menu\"><a class=\"menu__link\" href='#' id=\"logout\">logout</a></li>" );
+    document.write( "<li class=\"menu\"><a href='#' id=\"score\" class=\"menu__link\">my score</a></li>" );
+    if ( login_name === admin_name && login_password === admin_password ) {
+        document.write( "<li class=\"menu\"><a href='#' id=\"admin_p\" class=\"menu__link\">admin panel</a></li>" );
+    }
+    document.write( "</ul></a></li>" );
+    document.write( "</ul></li>" );
+
+    document.getElementById( "logout" ).addEventListener( 'click', (e) => { log_out(); forms(); } );
+    document.getElementById( "score" ).addEventListener( 'click', (e) => { score(); } );
+    // document.getElementById( "admin_p" ).addEventListener( 'click', (e) => { admin_panel(); console.log(e); });
+}
+
+function score(){
+    nav();
+    clearPage();
+    document.write( "<div> class='score'" );
+    document.write( "<h1 class=\"score__text\">" + `${user_score}:${bot_score}` + "</h1>" );
+    document.write( "<button class=\"score__btn\" onclick=\"resetGame();\"></button>" );
+    document.write( "</div>" );
+}
+
+function start_page() {
+    nav();
+    forms();
+}
+
+function admin_panel() {
+    document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
+    let users = Object.keys( localStorage );
+    document.write( "<table class=\"table\">" );
+    document.write( "<tr>" );
+    document.write( "<th class=\"table__text\">Users</th>" );
+    document.write( "<th class=\"table__text table__remove\">remove</th>" );
+    document.write( "</tr>" );
+
+    for ( i in users ) {
+        document.write( "<tr>" );
+        document.write( "<td class=\"table__users\">" + users[i] + "</td>" );
+        document.write( "<th><button id='deleteUser" + i + "' class=\"btn__remove\">x</button></th>" );
+        document.write( "</tr>" );        
+    }
+    document.write( "</table>" );
+    
+
+    document.addEventListener('click',function(e) {
+        for ( i in users ) {
+            if(e.target && e.target.id == 'deleteUser' + i ){
+                let element = e.target;
+                let parent = element.parentElement;
+                let pro_parent = parent.parentElement;
+                pro_parent.remove();
+                localStorage.removeItem(users[i]);
+            } if ( e.target && e.target.id == 'admin_p' ){
+                admin_panel();
+                console.log(e);
+            }
+        }
+    });
+    
+}
+
+function sign_up(){
+    login_name          = String(document.getElementById('login_name').value);
+    login_email         = String(document.getElementById('login_email').value);
+    login_password      = String(document.getElementById('login_password').value);
+    let storage         = localStorage;
+    // cheking admin
+    if ( login_name == admin_name ){ clearPage();nav(); }
+    // checking login is unique
+    if ( storage.getItem( login_name ) === null ){
+        let new_user = new Object;
+        new_user['login_n']       = login_name;
+        new_user['login_email']   = login_email;
+        new_user['login_password']= login_password;
+        new_user['date']          = current_date;
+        // ! u can set objects only json format to localStorage.
+        storage.setItem( login_name, JSON.stringify( new_user ) );
+        console.log( 'new user added!' );
+        return false;
+    }
+    else {
+        alert( 'Login name not unique!' );
+        return false;
+    }
+}
+function log_out(){
+    return localStorage.removeItem( Object.keys(localStorage)[0] );
+}
+function sign_in(){
+    let last_login_name     = prompt( 'login' ),
+        storage             = localStorage;
+    // checking login name is exist
+    if ( storage.getItem( last_login_name ) !== null ) {
+        // ...
+        console.log( 'OK!' );
+    } else {
+        console.log( "User not found!" );
+    }
+}
+// *for get keys from localStorage
+let keys_of_storage = Object.keys( localStorage );
+console.log( keys_of_storage );
+// sign_up();
+const remove_all = () => { localStorage.clear(); };
