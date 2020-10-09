@@ -10,29 +10,32 @@ let admin_data = JSON.parse(localStorage.getItem('admin'));
 let admin_name = admin_data.name;
 let admin_password = admin_data.password;
 let login_name, login_email, login_password;
-let game_over, chance = 1, start_q, change_over,
-    r_n, confirming, user_score = 0, bot_score = 0;
+let game_over, chance = 0, start_q, change_over;
+let r_n, confirming, user_score = 0, bot_score = 0;
+let email = '^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$';
 
-const reset_score = () => { user_score = 0, bot_score = 0; };
-const congratulations = () => {
+function reset_score() { user_score = 0, bot_score = 0; }
+function congratulations(){
     user_score++;
-    document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
     document.write( "<h1 class=\"animation-text\">" + `${r_n}` + "</h1>" );
     document.write( "<p class=\"text\">Congratulations! You have find out the guessed number.</p>" );
     document.write( "<button onclick=\"resetGame();\" class=\"btn\">Play Again</button>" );
     document.write( "<p class=\"score\">" + `${user_score}:${bot_score}` + "</p>" );
-};
+}
 
-const fail = () => {
+function fail(){
     bot_score++;
-    document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
     document.write( "<h1 class=\"animation-text\">" + `${r_n}` + "</h1>" );
     document.write( "<p class=\"text\" style=\"color: red;\">Fail! You not found the guessed number.</p>" );
     document.write( "<button onclick=\"resetGame();\" class=\"btn\">Play Again</button>" );
     document.write( "<p class=\"score\">" + `${user_score}:${bot_score}` + "</p>" );
-};
+}
+function style(){
+    document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
+}
 
-const clearPage = () => { document.body.innerHTML = ""; };
+function clearPage() { document.body.innerHTML = ""; }
+
 function resetGame() {
     clearPage();
     setTimeout(function() {
@@ -41,28 +44,24 @@ function resetGame() {
 }
 
 function start_game() {
-    alert( 'let play game' );
     r_n         = Math.floor(Math.random()*100) + 1;
     game_over   = false;
     while ( !game_over ) {
         console.log( r_n );
         start_q     = Number( prompt( "Hello, I guessed one number you should find it out!" ) );
         change_over = chance++;
-        if ( start_q == r_n ) {
-            congratulations();
-            game_over = true;
-        }
-        else if ( !start_q ) { 
+        if ( start_q == r_n ) { congratulations(); game_over = true; }
+        if ( !start_q ) { 
             confirming = confirm( "You want to lose it!" );
-            if ( confirming ){ fail(); break; }
+            if ( confirming ){ fail(); game_over = true; console.log("user lose"); }
         }
-        else if ( start_q != r_n && change_over >= 3 ) {
+        if ( start_q != r_n && change_over >= 3 ) {
             alert( "wrong!" );
         }
-        else if ( start_q > r_n && change_over < 3 ) {
+        if ( start_q > r_n && change_over < 3 ) {
             alert( "given number is greater than imagined number!" );
         }
-        else if ( start_q < r_n && change_over < 3 ) {
+        if ( start_q < r_n && change_over < 3 ) {
             alert( "given number is smaller than guessed number!" );
         }
     }
@@ -70,30 +69,28 @@ function start_game() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 function forms(){
-    document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
     document.write( "<form name=\"myForm\" class=\"form\" method=\"post\">" );
     document.write( "<div class=\"form__text\">Login</div>" );
     document.write( "<input class=\"form__input\" placeholder=\"Enter your login\" type=\"text\" id=\"login_name\"></input>" );
     document.write( "<div class=\"form__text\">Email</div>" );
-    document.write( "<input class=\"form__input\" placeholder=\"Enter your email\" type=\"text\" id=\"login_email\"></input>" );
+    document.write( "<input pattern=" + email + " class=\"form__input\" placeholder=\"Enter your email\" type=\"text\" id=\"login_email\"></input>" );
     document.write( "<div class=\"form__text\">Password</div>" );
     document.write( "<input class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
-    document.write( "<br><button type=\"submit\" href=\"#\" onclick=\"sign_up();\" class=\"form__btn\">Sign Up</button>" );
+    document.write( "<br><button href=\"#\" onclick=\"sign_up();\" class=\"form__btn\">Sign Up</button>" );
 }
 function forms_in(){
-    document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
     document.write( "<form name=\"myForm\" class=\"form\" method=\"post\">" );
     document.write( "<div class=\"form__text\">Login</div>" );
     document.write( "<input class=\"form__input\" placeholder=\"Enter your login\" type=\"text\" id=\"login_name\"></input>" );
     document.write( "<div class=\"form__text\">Password</div>" );
     document.write( "<input class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
-    document.write( "<br><button type=\"submit\" href=\"#\" onclick=\"sign_in();\" class=\"form__btn\">Sign Up</button>" );
+    document.write( "<br><button href=\"#\" onclick=\"sign_in();\" class=\"form__btn\">Sign Up</button>" );
 }
 
 function nav(){
     document.write("<nav class=\"menu\"><ul class=\"menu__list\">");
     document.write("<li class=\"menu\"><a class=\"menu__link\">" + 
-    Object.keys(localStorage)[0] );
+    Object.keys( localStorage)[0] );
     document.write( "<ul class=\"sub-menu-list\">" );
     document.write( "<li class=\"menu\"><a class=\"menu__link\" href='#' id=\"logout\">logout</a></li>" );
     document.write( "<li class=\"menu\"><a href='#' id=\"score\" class=\"menu__link\">my score</a></li>" );
@@ -101,16 +98,28 @@ function nav(){
         document.write( "<li class=\"menu\"><a href='#' id=\"admin_p\" class=\"menu__link\">admin panel</a></li>" );
     }
     document.write( "</ul></a></li>" );
-    document.write( "</ul></li>" );
+    document.write( "</ul></nav>" );
+
+    document.addEventListener('click',function(e) {
+        if ( e.target.id == 'admin_p' ){
+            admin_panel();console.log(e);
+        } 
+        if ( e.target.id == 'logout'){
+            log_out();clearPage();start_page();
+        } 
+        if ( e.target.id == 'score'){
+            clearPage(); score();
+        }
+    });
 }
 
 function score(){
     nav();
-    clearPage();
-    document.write( "<div> class='score'" );
+    document.write( "<div class='score'>" );
     document.write( "<h1 class=\"score__text\">" + `${user_score}:${bot_score}` + "</h1>" );
-    document.write( "<button class=\"score__btn\" onclick=\"resetGame();\"></button>" );
+    document.write( "<button class=\"score__btn\" onclick=\"resetGame();\">Play Again</button>" );
     document.write( "</div>" );
+    
 }
 
 function start_page() {
@@ -118,8 +127,16 @@ function start_page() {
     document.write( "<button id=\"start_signup\" class=\"start__signUp\">Sign Up</button>" );
     document.write( "<button id=\"start_signin\" class=\"start__signIn\">Sign In</button>" );
     document.write( "</div>" );
+    document.addEventListener('click',function(e) {
+        if ( e.target.id == 'start_signup'){
+            clearPage(); forms();
+        }
+        if ( e.target.id == 'start_signin'){
+            clearPage(); forms_in();
+        }
+    });
 }
-start_page();
+
 function admin_panel() {
     document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
     let users = Object.keys( localStorage );
@@ -135,46 +152,43 @@ function admin_panel() {
         document.write( "<th><button id='deleteUser" + i + "' class=\"btn__remove\">x</button></th>" );
         document.write( "</tr>" );        
     }
-    document.write( "</table>" );    
+    document.write( "</table>" );  
+    
+    document.addEventListener('click',function(e) {
+        let users = Object.keys( localStorage );
+        for ( i in users ) {
+            if(e.target && e.target.id == 'deleteUser' + i ){
+                let element = e.target;
+                let parent = element.parentElement;
+                let pro_parent = parent.parentElement;
+                pro_parent.remove();
+                localStorage.removeItem(users[i]);
+            } 
+        }
+    });
 }
 
-document.addEventListener('click',function(e) {
-    let users = Object.keys( localStorage );
-    for ( i in users ) {
-        if(e.target && e.target.id == 'deleteUser' + i ){
-            let element = e.target;
-            let parent = element.parentElement;
-            let pro_parent = parent.parentElement;
-            pro_parent.remove();
-            localStorage.removeItem(users[i]);
-        } 
-    }
-    if ( e.target && e.target.id == 'admin_p' ){
-        admin_panel();console.log(e);
-    } 
-    if ( e.target && e.target.id == 'logout'){
-        log_out();clearPage();start_page();
-    } 
-    if ( e.target && e.target.id == 'score'){
-        clearPage(); score();
-    }
-    if ( e.target && e.target.id == 'start_signup'){
-        clearPage(); forms();
-    }
-    if ( e.target && e.target.id == 'start_signin'){
-        clearPage(); forms_in();
-    }
-});
+
 
 function sign_up(){
     login_name          = String(document.getElementById('login_name').value);
     login_email         = String(document.getElementById('login_email').value);
     login_password      = String(document.getElementById('login_password').value);
-    let storage         = localStorage,
-        email_v         = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let storage         = localStorage;
 
+    
+    // checking login is unique
+    if ( storage.getItem( login_name ) !== null ) {
+        alert( 'Login name not unique!' );
+        return false;
+    }
+    if ( login_name == '' || login_password == '' || login_email == '' ) { 
+        alert( 'You should fill it out!' );
+        return false;
+    }
     // validation of email
-    if ( storage.getItem( login_name ) === null || !login_email.match( email_v) ){
+    // && !login_email.match( email_v) 
+    if ( storage.getItem( login_name ) === null){
         let new_user = new Object;
         new_user['login_n']       = login_name;
         new_user['login_email']   = login_email;
@@ -185,14 +199,10 @@ function sign_up(){
         console.log( 'new user added!' );
         resetGame();
     }
-    // checking login is unique
-    if ( storage.getItem( login_name ) !== null ) {
-        alert( 'Login name not unique!' );return false;
-    }
-    
-    else {
-        alert( "Email is not valid!" );return false;
-    }
+    // else {
+    //     alert( "Email is not valid!" );
+    //     return false;
+    // }
 }
 let log_out = () => {return localStorage.removeItem( Object.keys(localStorage)[0] );}
 
@@ -210,5 +220,4 @@ function sign_in(){
 // *for get keys from localStorage
 let keys_of_storage = Object.keys( localStorage );
 console.log( keys_of_storage );
-// sign_up();
 const remove_all = () => { localStorage.clear(); };
