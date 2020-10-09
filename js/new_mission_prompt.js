@@ -119,7 +119,7 @@ function start_page() {
     document.write( "<button class=\"start__signIn\">Sign In</button>" );
     document.write( "</div>" );
 }
-
+start_page();
 function admin_panel() {
     document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
     let users = Object.keys( localStorage );
