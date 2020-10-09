@@ -4,6 +4,7 @@
 let admin = { "admin": "Ismoil", "email": "admin@admin.com", "password": "i1234567i" };
 let admin_paswd = "i1234567i";
 let current_date = new Date();
+let current_user = Object.keys( localStorage[0] );
 
 function forms(){
     document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
@@ -14,7 +15,7 @@ function forms(){
     document.write( "<input class=\"form__input\" placeholder=\"Enter your email\" type=\"text\" id=\"login_email\"></input>" );
     document.write( "<div class=\"form__text\">Password</div>" );
     document.write( "<input class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
-    document.write( "<button type=\"submit\" href=\"#\" onclick=\"sign_up();\" class=\"form__btn\">Sign Up</button>" );
+    document.write( "<br><button type=\"submit\" href=\"#\" onclick=\"sign_up();\" class=\"form__btn\">Sign Up</button>" );
 }
 
 function nav(){
@@ -34,9 +35,10 @@ function nav(){
 
 function score(){
     clearPage();
-    document.write(  );
+    document.write( "<div> class='score'" );
     document.write( "<h1 class=\"score__text\">" + `${user_score}:${bot_score}` + "</h1>" );
-    // resetGame();
+    document.write( "<button class=\"score__btn\" onclick=\"resetGame();\"></button>" );
+    document.write( "</div>" );
 }
 
 nav();
