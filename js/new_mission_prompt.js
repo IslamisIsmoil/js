@@ -23,6 +23,7 @@ function nav(){
     Object.keys(localStorage)[ Object.keys(localStorage).length - 1 ] );
     document.write( "<ul class=\"sub-menu-list\">" );
     document.write( "<li class=\"menu\"><a class=\"menu__link\">logout</a></li>" );
+    document.write( "<li class=\"menu\"><a class=\"menu__link\">my score</a></li>" );
     document.write( "</ul></a></li>" );
     document.write( "</ul></li>" );
 }
