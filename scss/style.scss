@@ -1,0 +1,35 @@
+
+.animation-text{
+	display: inline-block!important;
+	position: absolute;
+	z-index: 1;
+	transform: translate( -50%, -50% );
+	margin-bottom: 10px;
+	animation: beat 500ms linear infinite alternate 0s forwards;
+	&:hover{
+		animation-play-state: paused;
+	}
+}
+p {
+	display: inline-block!important;
+	position: absolute;
+	z-index: 2;
+	transform: translate( -50%, 50% );
+	margin-top: 190px;
+}
+body {
+	margin-top: 10em;
+}
+@keyframes beat {
+	0% {
+		font-size: 150px;
+		color: #00f;
+	}
+	50% {
+		font-size: 160px;
+	}
+	100%{
+		font-size: 170px;
+		color: #000;
+	}
+}
