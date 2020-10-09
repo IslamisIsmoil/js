@@ -14,19 +14,31 @@ function forms(){
     document.write( "<input class=\"form__input\" placeholder=\"Enter your email\" type=\"text\" id=\"login_email\"></input>" );
     document.write( "<div class=\"form__text\">Password</div>" );
     document.write( "<input class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
-    document.write( "<button type=\"submit\" onclick=\"sign_up();\" class=\"form__btn\">Sign Up</button>" );
+    document.write( "<button type=\"submit\" href=\"#\" onclick=\"sign_up();\" class=\"form__btn\">Sign Up</button>" );
 }
 
 function nav(){
     document.write("<nav class=\"menu\"><ul class=\"menu__list\">");
     document.write("<li class=\"menu\"><a class=\"menu__link\">" + 
-    Object.keys(localStorage)[ Object.keys(localStorage).length - 1 ] );
+    Object.keys(localStorage)[0] );
     document.write( "<ul class=\"sub-menu-list\">" );
-    document.write( "<li class=\"menu\"><a class=\"menu__link\">logout</a></li>" );
-    document.write( "<li class=\"menu\"><a class=\"menu__link\">my score</a></li>" );
+    document.write( "<li class=\"menu\"><a class=\"menu__link\" href='#' id=\"logout\">logout</a></li>" );
+    document.write( "<li class=\"menu\"><a href='#' id=\"score\" class=\"menu__link\">my score</a></li>" );
     document.write( "</ul></a></li>" );
     document.write( "</ul></li>" );
+
+    document.getElementById( "logout" ).addEventListener( 'click', (e) => { log_out(); forms(); } );
+    document.getElementById( "score" ).addEventListener( 'click', (e) => { score(); } );
+
 }
+
+function score(){
+    clearPage();
+    document.write(  );
+    document.write( "<h1 class=\"score__text\">" + `${user_score}:${bot_score}` + "</h1>" );
+    // resetGame();
+}
+
 nav();
 function start_page() {
     forms();
@@ -80,11 +92,12 @@ function sign_up(){
         storage.setItem( login_name, JSON.stringify( new_user ) );
         console.log( 'new user added!' );
     } else {
-        console.log( 'Login name not unique!' );
+        alert( 'Login name not unique!' );
+        return false;
     }
 }
 function log_out(){
-    return localStorage.removeItem( Object.keys(localStorage)[ Object.keys(localStorage).length - 1 ] );
+    return localStorage.removeItem( Object.keys(localStorage)[0] );
 }
 function sign_in(){
     let last_login_name     = prompt( 'login' ),
@@ -124,7 +137,7 @@ const fail = () => {
     document.write( "<p class=\"score\">" + `${user_score}:${bot_score}` + "</p>" );
 };
 
-const clearPage       = () => { document.body.innerHTML = ""; };
+const clearPage = () => { document.body.innerHTML = ""; };
 function resetGame() {
     clearPage();
     setTimeout(function() {
