@@ -116,7 +116,7 @@ function score(){
 function start_page() {
     document.write( "<div>" );
     document.write( "<button id=\"start_signup\" class=\"start__signUp\">Sign Up</button>" );
-    document.write( "<button class=\"start__signIn\">Sign In</button>" );
+    document.write( "<button id=\"start_signin\" class=\"start__signIn\">Sign In</button>" );
     document.write( "</div>" );
 }
 start_page();
@@ -173,8 +173,8 @@ function sign_up(){
     let storage         = localStorage,
         email_v         = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    // checking login is unique
-    if ( storage.getItem( login_name ) === null ){
+    // validation of email
+    if ( storage.getItem( login_name ) === null || !login_email.match( email_v) ){
         let new_user = new Object;
         new_user['login_n']       = login_name;
         new_user['login_email']   = login_email;
@@ -185,10 +185,12 @@ function sign_up(){
         console.log( 'new user added!' );
         resetGame();
     }
+    // checking login is unique
     if ( storage.getItem( login_name ) !== null ) {
         alert( 'Login name not unique!' );
     }
-    if ( !login_email.match( email_v ) ) {
+    
+    else {
         alert( "Email is not valid!" );
     }
 }
