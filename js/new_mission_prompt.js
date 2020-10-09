@@ -1,10 +1,15 @@
 // * sessionStorage: stores data only for a session, meaning that the data is stored until the browser or tab is closed.
 // * localStorage: stores data with no expiration date, and gets cleared only through JavaScript, or clearing the Browser cache / Locally Stored Data.
 
-let admin = { "admin": "Ismoil", "email": "admin@admin.com", "password": "i1234567i" };
-let admin_paswd = "i1234567i";
+let admin = { "name": "Ismoil", "email": "admin@admin.com", "password": "i1234567i" };
+localStorage.setItem( "admin", JSON.stringify(admin) );
 let current_date = new Date();
-let current_user = Object.keys( localStorage[0] );
+let current_user = localStorage.getItem(Object.keys(localStorage)[0]);
+let current_user_data = JSON.parse(localStorage.getItem(Object.keys(localStorage)[0]));
+let admin_data = JSON.parse(localStorage.getItem('admin'));
+let admin_name = admin_data.name;
+let admin_password = admin_data.password;
+let login_name, login_email, login_password;
 
 function forms(){
     document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
@@ -25,15 +30,19 @@ function nav(){
     document.write( "<ul class=\"sub-menu-list\">" );
     document.write( "<li class=\"menu\"><a class=\"menu__link\" href='#' id=\"logout\">logout</a></li>" );
     document.write( "<li class=\"menu\"><a href='#' id=\"score\" class=\"menu__link\">my score</a></li>" );
+    if ( login_name == admin_name && login_password == admin_password ) {
+        document.write( "<li class=\"menu\"><a href='#' id=\"admin_p\" class=\"menu__link\">admin panel</a></li>" );
+    }
     document.write( "</ul></a></li>" );
     document.write( "</ul></li>" );
 
     document.getElementById( "logout" ).addEventListener( 'click', (e) => { log_out(); forms(); } );
     document.getElementById( "score" ).addEventListener( 'click', (e) => { score(); } );
-
+    document.getElementById( "admin_p" ).addEventListener( 'click', (e) => { admin_panel(); console.log(e); });
 }
 
 function score(){
+    nav();
     clearPage();
     document.write( "<div> class='score'" );
     document.write( "<h1 class=\"score__text\">" + `${user_score}:${bot_score}` + "</h1>" );
@@ -41,12 +50,11 @@ function score(){
     document.write( "</div>" );
 }
 
-// nav();
 function start_page() {
     nav();
     forms();
 }
-
+start_page();
 function admin_panel() {
     document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
     let users = Object.keys( localStorage );
@@ -85,7 +93,7 @@ function sign_up(){
     login_password      = String(document.getElementById('login_password').value);
     let storage         = localStorage;
     // checking login is unique
-    if ( storage.getItem( login_name ) === null ){
+    if ( storage.getItem( login_name ) === null || storage.getItem( login_name ) === admin_name ){
         let new_user = new Object;
         new_user['login_n']       = login_name;
         new_user['login_email']   = login_email;
@@ -94,7 +102,11 @@ function sign_up(){
         // ! u can set objects only json format to localStorage.
         storage.setItem( login_name, JSON.stringify( new_user ) );
         console.log( 'new user added!' );
-    } else {
+        return false;
+    }
+    // checking admin 
+    // if ( storage.getItem( login_name ) === admin )
+    else {
         alert( 'Login name not unique!' );
         return false;
     }
@@ -174,9 +186,3 @@ function start_game() {
         }
     }
 }
-
-// start_game();
-
-let game = () => { start_game();  };
-
-// forms();
