@@ -21,8 +21,10 @@ function nav(){
     document.write("<nav class=\"menu\"><ul class=\"menu__list\">");
     document.write("<li class=\"menu\"><a class=\"menu__link\">" + 
     Object.keys(localStorage)[ Object.keys(localStorage).length - 1 ] );
-    document.write("<ul class=\"sub-menu-list\"><li class=\"menu\"><a class=\"menu__link\">logout</a></li></ul></a></li>")
-    document.write( "</ul></li>" )
+    document.write( "<ul class=\"sub-menu-list\">" );
+    document.write( "<li class=\"menu\"><a class=\"menu__link\">logout</a></li>" );
+    document.write( "</ul></a></li>" );
+    document.write( "</ul></li>" );
 }
 nav();
 function start_page() {
