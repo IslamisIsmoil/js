@@ -10,11 +10,9 @@ let admin_data = JSON.parse(localStorage.getItem('admin'));
 let admin_name = admin_data.name;
 let admin_password = admin_data.password;
 let login_name, login_email, login_password;
-
-
-////////////////////////////////////////////////////////////////////////////////
 let game_over, chance = 1, start_q, change_over,
     r_n, confirming, user_score = 0, bot_score = 0;
+
 const reset_score = () => { user_score = 0, bot_score = 0; };
 const congratulations = () => {
     user_score++;
@@ -43,6 +41,7 @@ function resetGame() {
 }
 
 function start_game() {
+    alert( 'let play game' );
     r_n         = Math.floor(Math.random()*100) + 1;
     game_over   = false;
     while ( !game_over ) {
@@ -81,6 +80,15 @@ function forms(){
     document.write( "<input class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
     document.write( "<br><button type=\"submit\" href=\"#\" onclick=\"sign_up();\" class=\"form__btn\">Sign Up</button>" );
 }
+function forms_in(){
+    document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
+    document.write( "<form name=\"myForm\" class=\"form\" method=\"post\">" );
+    document.write( "<div class=\"form__text\">Login</div>" );
+    document.write( "<input class=\"form__input\" placeholder=\"Enter your login\" type=\"text\" id=\"login_name\"></input>" );
+    document.write( "<div class=\"form__text\">Password</div>" );
+    document.write( "<input class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
+    document.write( "<br><button type=\"submit\" href=\"#\" onclick=\"sign_in();\" class=\"form__btn\">Sign Up</button>" );
+}
 
 function nav(){
     document.write("<nav class=\"menu\"><ul class=\"menu__list\">");
@@ -94,10 +102,6 @@ function nav(){
     }
     document.write( "</ul></a></li>" );
     document.write( "</ul></li>" );
-
-    document.getElementById( "logout" ).addEventListener( 'click', (e) => { log_out(); forms(); } );
-    document.getElementById( "score" ).addEventListener( 'click', (e) => { score(); } );
-    // document.getElementById( "admin_p" ).addEventListener( 'click', (e) => { admin_panel(); console.log(e); });
 }
 
 function score(){
@@ -110,8 +114,10 @@ function score(){
 }
 
 function start_page() {
-    nav();
-    forms();
+    document.write( "<div>" );
+    document.write( "<button id=\"start_signup\" class=\"start__signUp\">Sign Up</button>" );
+    document.write( "<button class=\"start__signIn\">Sign In</button>" );
+    document.write( "</div>" );
 }
 
 function admin_panel() {
@@ -140,9 +146,21 @@ function admin_panel() {
                 let pro_parent = parent.parentElement;
                 pro_parent.remove();
                 localStorage.removeItem(users[i]);
-            } if ( e.target && e.target.id == 'admin_p' ){
-                admin_panel();
-                console.log(e);
+            } 
+            if ( e.target && e.target.id == 'admin_p' ){
+                admin_panel();console.log(e);
+            } 
+            if ( e.target && e.target.id == 'logout'){
+                log_out();clearPage();start_page();
+            } 
+            if ( e.target && e.target.id == 'score'){
+                clearPage(); score();
+            }
+            if ( e.target && e.target.id == 'start_signup'){
+                clearPage(); forms();
+            }
+            if ( e.target && e.target.id == 'start_signin'){
+                clearPage(); forms_in();
             }
         }
     });
@@ -154,8 +172,7 @@ function sign_up(){
     login_email         = String(document.getElementById('login_email').value);
     login_password      = String(document.getElementById('login_password').value);
     let storage         = localStorage;
-    // cheking admin
-    if ( login_name == admin_name ){ clearPage();nav(); }
+
     // checking login is unique
     if ( storage.getItem( login_name ) === null ){
         let new_user = new Object;
@@ -166,26 +183,25 @@ function sign_up(){
         // ! u can set objects only json format to localStorage.
         storage.setItem( login_name, JSON.stringify( new_user ) );
         console.log( 'new user added!' );
-        return false;
+        resetGame();
     }
     else {
         alert( 'Login name not unique!' );
         return false;
     }
 }
-function log_out(){
-    return localStorage.removeItem( Object.keys(localStorage)[0] );
-}
+let log_out = () => {return localStorage.removeItem( Object.keys(localStorage)[0] );}
+
 function sign_in(){
-    let last_login_name     = prompt( 'login' ),
-        storage             = localStorage;
+    login_name          = String(document.getElementById('login_name').value);
+    login_password      = String(document.getElementById('login_password').value);
+    let storage         = localStorage;
+    // cheking admin
+    if ( login_name == admin_name ){ clearPage();nav(); }
     // checking login name is exist
     if ( storage.getItem( last_login_name ) !== null ) {
-        // ...
-        console.log( 'OK!' );
-    } else {
-        console.log( "User not found!" );
-    }
+        clearPage();start_page();console.log( 'OK!' );
+    } else { console.log( "User not found!" ); }
 }
 // *for get keys from localStorage
 let keys_of_storage = Object.keys( localStorage );
