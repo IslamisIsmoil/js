@@ -12,7 +12,7 @@ let admin_password = admin_data.password;
 let login_name, login_email, login_password;
 let game_over, chance = 0, start_q, change_over;
 let r_n, confirming, user_score = 0, bot_score = 0;
-let email = '^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$';
+var email_v = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
 
 function reset_score() { user_score = 0, bot_score = 0; }
 function congratulations(){
@@ -73,7 +73,7 @@ function forms(){
     document.write( "<div class=\"form__text\">Login</div>" );
     document.write( "<input class=\"form__input\" placeholder=\"Enter your login\" type=\"text\" id=\"login_name\"></input>" );
     document.write( "<div class=\"form__text\">Email</div>" );
-    document.write( "<input pattern=" + email + " class=\"form__input\" placeholder=\"Enter your email\" type=\"text\" id=\"login_email\"></input>" );
+    document.write( "<input class=\"form__input\" placeholder=\"Enter your email\" type=\"text\" id=\"login_email\"></input>" );
     document.write( "<div class=\"form__text\">Password</div>" );
     document.write( "<input class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
     document.write( "<br><button href=\"#\" onclick=\"sign_up();\" class=\"form__btn\">Sign Up</button>" );
@@ -182,6 +182,10 @@ function sign_up(){
         alert( 'Login name not unique!' );
         return false;
     }
+    if ( !email_v.test( login_email ) ) {
+        alert( "Email is not valid!" );
+        return false;
+    }
     if ( login_name == '' || login_password == '' || login_email == '' ) { 
         alert( 'You should fill it out!' );
         return false;
@@ -199,10 +203,7 @@ function sign_up(){
         console.log( 'new user added!' );
         resetGame();
     }
-    // else {
-    //     alert( "Email is not valid!" );
-    //     return false;
-    // }
+    
 }
 let log_out = () => {return localStorage.removeItem( Object.keys(localStorage)[0] );}
 
