@@ -41,8 +41,9 @@ function score(){
     document.write( "</div>" );
 }
 
-nav();
+// nav();
 function start_page() {
+    nav();
     forms();
 }
 
