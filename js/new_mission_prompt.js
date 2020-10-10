@@ -133,6 +133,10 @@ function sign_up(){
     login_password      = String(document.getElementById('login_password').value);
     var storage         = localStorage;
     // checking login is unique
+    if ( login_name == '' || login_password == '' || login_email == '' ) { 
+        alert( 'You should fill it out!' );
+        return false;
+    }
     if ( storage.getItem( login_name ) !== null ) {
         alert( 'Login name not unique!' );
         return false;
@@ -141,10 +145,7 @@ function sign_up(){
         alert( "Email is not valid!" );
         return false;
     }
-    if ( login_name == '' || login_password == '' || login_email == '' ) { 
-        alert( 'You should fill it out!' );
-        return false;
-    }
+    
     else if ( storage.getItem( login_name ) === null){
         var new_user = new Object;
         new_user['login_n']       = login_name;
