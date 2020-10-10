@@ -157,7 +157,9 @@ function sign_up(){
         start_game();
     }
 }
-var log_out = () => {localStorage.removeItem( Object.keys(localStorage)[0] );}
+function log_out() {
+    localStorage.removeItem( Object.keys(localStorage)[0] );
+}
 
 function sign_in(){
     last_login_name     = String(document.getElementById('login_name').value);
