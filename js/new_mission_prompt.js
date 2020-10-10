@@ -179,7 +179,7 @@ function sign_in(){
     // checking login name is exist
     if ( storage.getItem( last_login_name ) !== null ) {
         nav();console.log( 'OK!' );start_game();
-    } else { console.log( "User not found!" ); }
+    } else { alert( "User not found!" ); }
 }
 // *for get keys from localStorage
 var keys_of_storage = Object.keys( localStorage );
