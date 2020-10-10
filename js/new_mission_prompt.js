@@ -1,15 +1,16 @@
 // * sessionStorage: stores data only for a session, meaning that the data is stored until the browser or tab is closed.
 // * localStorage: stores data with no expiration date, and gets cleared only through JavaScript, or clearing the Browser cache / Locally Stored Data.
 
+var current_date = new Date();
 var admin = { "name": "admin", "email": "admin@admin.com", "password": "i1234567i" };
 localStorage.setItem( "admin", JSON.stringify(admin) );
-var current_date = new Date();
 var current_user = localStorage.getItem(Object.keys(localStorage)[0]);
-var current_user_data = JSON.parse(localStorage.getItem(Object.keys(localStorage)[0]));
+// var current_user_data = JSON.parse(localStorage.getItem(Object.keys(localStorage)[0]));
 var admin_data = JSON.parse(localStorage.getItem('admin'));
 var admin_name = admin_data.name;
 var admin_password = admin_data.password;
 var login_name, login_email, login_password;
+var last_login_name, last_login_password;
 var game_over, chance = 0, start_q, change_over;
 var r_n, confirming, user_score = 0, bot_score = 0;
 var email_v = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
@@ -31,7 +32,7 @@ function forms(){
         event.preventDefault();
     });
     var btn = document.getElementById( 'signup' );
-    btn.addEventListener( 'click', e => { console.log("process run", e); sign_up(); } );
+    btn.addEventListener( 'click', e => {console.log("process run", e);sign_up();});
 }
 function forms_in(){
     document.write( "<div id=\"diva\">" );
@@ -52,13 +53,14 @@ function forms_in(){
 }
 
 function nav(){
-    document.write("<nav class=\"menu\"><ul class=\"menu__list\">");
-    document.write("<li class=\"menu\"><a class=\"menu__link\">" + 
-    Object.keys( localStorage)[0] );
+    document.write("<nav id=\"nava\" class=\"menu\"><ul class=\"menu__list\">");
+    document.write("<li class=\"menu\"><a id=\"menu__link\" class=\"menu__link\">");
+    if ( !last_login_name  ) { document.getElementById( 'menu__link' ).innerHTML = login_name; }
+    if ( !login_name ) { document.getElementById( 'menu__link' ).innerHTML = last_login_name; }
     document.write( "<ul class=\"sub-menu-list\">" );
     document.write( "<li class=\"menu\"><a href='#' class=\"menu__link\"  id=\"logout\">logout</a></li>" );
     document.write( "<li class=\"menu\"><a href='#' id=\"score\" class=\"menu__link\">my score</a></li>" );
-    if ( login_name === admin_name && login_password === admin_password ) {
+    if ( login_name === admin_name || last_login_name === admin_name ) {
         document.write( "<li class=\"menu\"><a href='#' id=\"admin_p\" class=\"menu__link\">admin panel</a></li>" );
     }
     document.write( "</ul></a></li>" );
@@ -66,7 +68,8 @@ function nav(){
 
     document.addEventListener('click',function(e) {
         if ( e.target.id == 'admin_p' ){
-            admin_panel();console.log(e);
+            admin_panel();
+            console.log( 'activation of admin panel' );
         } 
         if ( e.target.id == 'logout'){
             log_out();start_page();
@@ -78,6 +81,7 @@ function nav(){
 }
 
 function score(){
+    clearPage();
     document.write( "<div id=\"diva\">" );
     document.write( "<div class='score'>" );
     document.write( "<h1 class=\"score__text\">" + `${user_score}:${bot_score}` + "</h1>" );
@@ -141,8 +145,20 @@ function sign_up(){
     login_password      = String(document.getElementById('login_password').value);
     var storage         = localStorage;
     // checking login is unique
-    if ( login_name == '' || login_password == '' || login_email == '' ) { 
-        alert( 'You should fill it out!' );
+    if ( login_name == '' ) { 
+        alert( 'You should fill it out login name!' );
+        return false;
+    }
+    if ( login_email == '' ) {
+        alert( 'You should fill it out email!' );
+    }
+    // Password field is required
+    if ( login_password == '' ) {
+        alert( 'Password field is required' );
+        return false;
+    }
+    if ( login_password.length < 6  ) {
+        alert( "weak password" );
         return false;
     }
     if ( storage.getItem( login_name ) !== null ) {
@@ -156,29 +172,48 @@ function sign_up(){
     
     else if ( storage.getItem( login_name ) === null){
         var new_user = new Object;
-        new_user['login_n']       = login_name;
-        new_user['login_email']   = login_email;
-        new_user['login_password']= login_password;
-        new_user['date']          = current_date;
+        new_user['name']       = login_name;
+        new_user['email']      = login_email;
+        new_user['password']   = login_password;
+        new_user['date']       = current_date;
         // ! u can set objects only json format to localStorage.
         storage.setItem( login_name, JSON.stringify( new_user ) );
         console.log( 'new user added!' );
+        nav();
         start_game();
     }
 }
+
+function nav_remove() {
+    document.getElementById('nava').remove();
+}
+
 function log_out() {
-    localStorage.removeItem( Object.keys(localStorage)[0] );
+    clearPage();nav_remove();
 }
 
 function sign_in(){
     last_login_name     = String(document.getElementById('login_name').value);
-    login_password      = String(document.getElementById('login_password').value);
+    last_login_password = String(document.getElementById('login_password').value);
     var storage         = localStorage;
+    // Password field is required
+    if ( last_login_password == '' ) {
+        alert( 'Password field is required' );
+        return false;
+    }
+    // Password is incorrect
+    if ( last_login_password != JSON.parse( storage.getItem( last_login_name ) ).password ) {
+        alert( 'Password is incorrect' );
+        return false;
+    }
     // cheking admin
-    if ( login_name == admin_name ){ nav();admin_panel(); }
+    if ( last_login_name == admin_name ){ clearPage();nav();admin_panel(); }
     // checking login name is exist
-    if ( storage.getItem( last_login_name ) !== null ) {
-        nav();console.log( 'OK!' );start_game();
+
+    else if ( storage.getItem( last_login_name ) !== null ) {
+        nav();
+        console.log( 'OK!' );
+        start_game();
     } else { alert( "User not found!" ); }
 }
 // *for get keys from localStorage
@@ -189,9 +224,9 @@ function remove_all(){
     localStorage.clear(); 
 }
 
-
 ///////////////////////////////////////////////////////////
 function reset_score() { user_score = 0, bot_score = 0; }
+
 function congratulations(){
     clearPage();
     user_score++;
