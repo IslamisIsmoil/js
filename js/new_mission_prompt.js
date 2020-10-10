@@ -40,7 +40,7 @@ function forms_in(){
     document.write( "<input name=\"value\" class=\"form__input\" placeholder=\"Enter your login\" type=\"text\" id=\"login_name\"></input>" );
     document.write( "<div class=\"form__text\">Password</div>" );
     document.write( "<input name=\"value\" class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
-    document.write( "<br><button type=\"button\" id=\"signin\" class=\"form__btn\">Sign Up</button>" );
+    document.write( "<br><button type=\"button\" id=\"signin\" class=\"form__btn\">Sign In</button>" );
     document.write( "</div>" );
     var form = document.querySelector("form");
     form.addEventListener("button", event => {
