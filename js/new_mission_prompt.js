@@ -65,7 +65,7 @@ function nav(){
             admin_panel();console.log(e);
         } 
         if ( e.target.id == 'logout'){
-            log_out();clearPage();start_page();
+            log_out();start_page();
         } 
         if ( e.target.id == 'score'){
             score();
@@ -167,7 +167,7 @@ function sign_in(){
     login_password      = String(document.getElementById('login_password').value);
     var storage         = localStorage;
     // cheking admin
-    if ( login_name == admin_name ){ clearPage();nav();admin_panel(); }
+    if ( login_name == admin_name ){ nav();admin_panel(); }
     // checking login name is exist
     if ( storage.getItem( last_login_name ) !== null ) {
         nav();console.log( 'OK!' );start_game();
@@ -200,7 +200,7 @@ function style(){
     document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
 }
 
-function clearPage() { document.body.innerHTML = ""; }
+function clearPage() { document.getElementsByTagName('HTML')[0].innerHTML = ""; }
 
 function start_game() {
     r_n         = Math.floor(Math.random()*100) + 1;
@@ -226,7 +226,6 @@ function start_game() {
     }
 }
 function resetGame() {
-    clearPage();
     setTimeout(function() {
         start_game();
     }, 10);
