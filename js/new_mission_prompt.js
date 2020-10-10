@@ -15,6 +15,7 @@ var r_n, confirming, user_score = 0, bot_score = 0;
 var email_v = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
 /////////////////////////////////////////////////////////////////////////////////////////////////
 function forms(){
+    document.write( "<div id=\"diva\">" );
     document.write( "<form name=\"myForm\" class=\"form\" method=\"post\">" );
     document.write( "<div class=\"form__text\">Login</div>" );
     document.write( "<input name=\"value\" class=\"form__input\" placeholder=\"Enter your login\" type=\"text\" id=\"login_name\"></input>" );
@@ -23,6 +24,7 @@ function forms(){
     document.write( "<div class=\"form__text\">Password</div>" );
     document.write( "<input name=\"value\" class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
     document.write( "<br><button type=\"button\" id=\"signup\" class=\"form__btn\">Sign Up</button>" );
+    document.write( "</div>" );
     var form = document.querySelector("form");
     form.addEventListener("button", event => {
         console.log("Saving value", form.elements.value.value);
@@ -32,12 +34,14 @@ function forms(){
     btn.addEventListener( 'click', e => { console.log("process run", e); sign_up(); } );
 }
 function forms_in(){
+    document.write( "<div id=\"diva\">" );
     document.write( "<form name=\"myForm\" class=\"form\" method=\"post\">" );
     document.write( "<div class=\"form__text\">Login</div>" );
     document.write( "<input name=\"value\" class=\"form__input\" placeholder=\"Enter your login\" type=\"text\" id=\"login_name\"></input>" );
     document.write( "<div class=\"form__text\">Password</div>" );
     document.write( "<input name=\"value\" class=\"form__input\" placeholder=\"Enter your password\" type=\"password\" id=\"login_password\"></input>" );
     document.write( "<br><button type=\"button\" id=\"signin\" class=\"form__btn\">Sign Up</button>" );
+    document.write( "</div>" );
     var form = document.querySelector("form");
     form.addEventListener("button", event => {
         console.log("Saving value", form.elements.value.value);
@@ -52,10 +56,10 @@ function nav(){
     document.write("<li class=\"menu\"><a class=\"menu__link\">" + 
     Object.keys( localStorage)[0] );
     document.write( "<ul class=\"sub-menu-list\">" );
-    document.write( "<li class=\"menu\"><a class=\"menu__link\"  id=\"logout\">logout</a></li>" );
-    document.write( "<li class=\"menu\"><a  id=\"score\" class=\"menu__link\">my score</a></li>" );
+    document.write( "<li class=\"menu\"><a href='#' class=\"menu__link\"  id=\"logout\">logout</a></li>" );
+    document.write( "<li class=\"menu\"><a href='#' id=\"score\" class=\"menu__link\">my score</a></li>" );
     if ( login_name === admin_name && login_password === admin_password ) {
-        document.write( "<li class=\"menu\"><a  id=\"admin_p\" class=\"menu__link\">admin panel</a></li>" );
+        document.write( "<li class=\"menu\"><a href='#' id=\"admin_p\" class=\"menu__link\">admin panel</a></li>" );
     }
     document.write( "</ul></a></li>" );
     document.write( "</ul></nav>" );
@@ -74,15 +78,17 @@ function nav(){
 }
 
 function score(){
+    document.write( "<div id=\"diva\">" );
     document.write( "<div class='score'>" );
     document.write( "<h1 class=\"score__text\">" + `${user_score}:${bot_score}` + "</h1>" );
     document.write( "<button class=\"score__btn\" onclick=\"resetGame();\">Play Again</button>" );
+    document.write( "</div>" );
     document.write( "</div>" );
     
 }
 
 function start_page() {
-    document.write( "<div>" );
+    document.write( "<div id=\"diva\">" );
     document.write( "<button id=\"start_signup\" class=\"start__signUp\">Sign Up</button>" );
     document.write( "<button id=\"start_signin\" class=\"start__signIn\">Sign In</button>" );
     document.write( "</div>" );
@@ -95,10 +101,11 @@ function start_page() {
         }
     });
 }
-
+start_page();
 function admin_panel() {
-    document.write( "<link rel=\"stylesheet\" ss/style.css\">" );
+    style();
     var users = Object.keys( localStorage );
+    document.write( "<div id=\"diva\">" );
     document.write( "<table class=\"table\">" );
     document.write( "<tr>" );
     document.write( "<th class=\"table__text\">Users</th>" );
@@ -111,7 +118,8 @@ function admin_panel() {
         document.write( "<td><button id='deleteUser" + i + "' class=\"btn__remove\">x</button></td>" );
         document.write( "</tr>" );        
     }
-    document.write( "</table>" );  
+    document.write( "</table>" );
+    document.write( "</div>" );
     
     document.addEventListener('click',function(e) {
         var users = Object.keys( localStorage );
@@ -176,31 +184,42 @@ function sign_in(){
 // *for get keys from localStorage
 var keys_of_storage = Object.keys( localStorage );
 console.log( keys_of_storage );
-var remove_all = () => { localStorage.clear(); };
 
-start_page();
+function remove_all(){ 
+    localStorage.clear(); 
+}
+
+
 ///////////////////////////////////////////////////////////
 function reset_score() { user_score = 0, bot_score = 0; }
 function congratulations(){
+    clearPage();
     user_score++;
+    document.write( "<div id=\"diva\">" );
     document.write( "<h1 class=\"animation-text\">" + `${r_n}` + "</h1>" );
     document.write( "<p class=\"text\">Congratulations! You have find out the guessed number.</p>" );
-    document.write( "<button onclick=\"resetGame();\" class=\"btn\">Play Again</button>" );
+    document.write( "<button onclick=\"start_game();\" class=\"btn\">Play Again</button>" );
     document.write( "<p class=\"score\">" + `${user_score}:${bot_score}` + "</p>" );
+    document.write( "</div>" );
 }
 
 function fail(){
+    clearPage();
     bot_score++;
+    document.write( "<div id=\"diva\">" );
     document.write( "<h1 class=\"animation-text\">" + `${r_n}` + "</h1>" );
     document.write( "<p class=\"text\" style=\"color: red;\">Fail! You not found the guessed number.</p>" );
     document.write( "<button onclick=\"resetGame();\" class=\"btn\">Play Again</button>" );
     document.write( "<p class=\"score\">" + `${user_score}:${bot_score}` + "</p>" );
+    document.write( "</div>" );
 }
 function style(){
     document.write( "<link rel=\"stylesheet\" href=\"css/style.css\">" );
 }
 
-function clearPage() { document.getElementsByTagName('HTML')[0].innerHTML = ""; }
+function clearPage() { 
+    document.getElementById('diva').remove();
+}
 
 function start_game() {
     r_n         = Math.floor(Math.random()*100) + 1;
@@ -212,7 +231,7 @@ function start_game() {
         if ( start_q == r_n ) { congratulations(); game_over = true; }
         if ( !start_q ) { 
             confirming = confirm( "You want to lose it!" );
-            if ( confirming ){ fail(); game_over = true; console.log("user lose"); }
+            if ( confirming ){ fail(); break; }
         }
         if ( start_q != r_n && change_over >= 3 ) {
             alert( "wrong!" );
