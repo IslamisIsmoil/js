@@ -1,7 +1,7 @@
 // * sessionStorage: stores data only for a session, meaning that the data is stored until the browser or tab is closed.
 // * localStorage: stores data with no expiration date, and gets cleared only through JavaScript, or clearing the Browser cache / Locally Stored Data.
 
-var admin = { "name": "Ismoil", "email": "admin@admin.com", "password": "i1234567i" };
+var admin = { "name": "admin", "email": "admin@admin.com", "password": "i1234567i" };
 localStorage.setItem( "admin", JSON.stringify(admin) );
 var current_date = new Date();
 var current_user = localStorage.getItem(Object.keys(localStorage)[0]);
