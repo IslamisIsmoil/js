@@ -5,7 +5,6 @@ var current_date = new Date();
 var admin = { "name": "admin", "email": "admin@admin.com", "password": "i1234567i" };
 localStorage.setItem( "admin", JSON.stringify(admin) );
 var current_user = localStorage.getItem(Object.keys(localStorage)[0]);
-// var current_user_data = JSON.parse(localStorage.getItem(Object.keys(localStorage)[0]));
 var admin_data = JSON.parse(localStorage.getItem('admin'));
 var admin_name = admin_data.name;
 var admin_password = admin_data.password;
