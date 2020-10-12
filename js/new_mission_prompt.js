@@ -4,7 +4,8 @@
 var current_date = new Date();
 var admin = { "name": "admin", "email": "admin@admin.com", "password": "i1234567i" };
 localStorage.setItem( "admin", JSON.stringify(admin) );
-var current_user = localStorage.getItem(Object.keys(localStorage)[0]);
+var current_user_data = localStorage.getItem(Object.keys(localStorage)[0]);
+var current_user = (Object.keys(localStorage)[0]);
 var admin_data = JSON.parse(localStorage.getItem('admin'));
 var admin_name = admin_data.name;
 var admin_password = admin_data.password;
@@ -13,6 +14,7 @@ var last_login_name, last_login_password;
 var game_over, chance = 0, start_q, change_over;
 var r_n, confirming, user_score = 0, bot_score = 0;
 var email_v = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
+var user_status = false;
 /////////////////////////////////////////////////////////////////////////////////////////////////
 function forms(){
     document.write( "<div id=\"diva\">" );
@@ -58,6 +60,7 @@ function nav(){
     if ( !login_name ) { document.getElementById( 'menu__link' ).innerHTML = last_login_name; }
     document.write( "<ul class=\"sub-menu-list\">" );
     document.write( "<li class=\"menu\"><a href='#' class=\"menu__link\"  id=\"logout\">logout</a></li>" );
+    document.write( "<li class=\"menu\"><a href='#' class=\"menu__link\"  id=\"start_game\">start game</a></li>" );
     document.write( "<li class=\"menu\"><a href='#' id=\"score\" class=\"menu__link\">my score</a></li>" );
     if ( login_name === admin_name || last_login_name === admin_name ) {
         document.write( "<li class=\"menu\"><a href='#' id=\"admin_p\" class=\"menu__link\">admin panel</a></li>" );
@@ -72,6 +75,9 @@ function nav(){
         } 
         if ( e.target.id == 'logout'){
             log_out();start_page();
+        } 
+        if ( e.target.id == 'start_game'){
+            start_game();
         } 
         if ( e.target.id == 'score'){
             score();
@@ -91,20 +97,23 @@ function score(){
 }
 
 function start_page() {
+    // check logged user
+
     document.write( "<div id=\"diva\">" );
     document.write( "<button id=\"start_signup\" class=\"start__signUp\">Sign Up</button>" );
     document.write( "<button id=\"start_signin\" class=\"start__signIn\">Sign In</button>" );
     document.write( "</div>" );
+
     document.addEventListener('click',function(e) {
         if ( e.target.id == 'start_signup'){
-            forms();
+            clearPage();    forms();
         }
         if ( e.target.id == 'start_signin'){
-            forms_in();
+            clearPage();    forms_in();
         }
     });
 }
-start_page();
+
 function admin_panel() {
     style();
     var users = Object.keys( localStorage );
@@ -175,9 +184,12 @@ function sign_up(){
         new_user['email']      = login_email;
         new_user['password']   = login_password;
         new_user['date']       = current_date;
+        // save logged in user
+        new_user['loggined']   = true;
         // ! u can set objects only json format to localStorage.
         storage.setItem( login_name, JSON.stringify( new_user ) );
         console.log( 'new user added!' );
+        user_status = JSON.parse( localStorage.getItem( login_name ) ).loggined;
         nav();
         start_game();
     }
@@ -188,7 +200,9 @@ function nav_remove() {
 }
 
 function log_out() {
-    clearPage();nav_remove();
+    // remove logged in user from storage
+    user_status = false;
+    nav_remove();
 }
 
 function sign_in(){
@@ -212,6 +226,8 @@ function sign_in(){
     else if ( storage.getItem( last_login_name ) !== null ) {
         nav();
         console.log( 'OK!' );
+        // username storage loged_user: aaaa
+        user_status = true;
         start_game();
     } else { alert( "User not found!" ); }
 }
@@ -282,4 +298,11 @@ function resetGame() {
     setTimeout(function() {
         start_game();
     }, 10);
+}
+if ( user_status ) {
+    start_page();
+}
+else {
+    login_name = current_user;
+    nav();
 }
