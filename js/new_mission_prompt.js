@@ -4,17 +4,24 @@
 var current_date = new Date();
 var admin = { "name": "admin", "email": "admin@admin.com", "password": "i1234567i" };
 localStorage.setItem( "admin", JSON.stringify(admin) );
+var current_user;
 var current_user_data = localStorage.getItem(Object.keys(localStorage)[0]);
-var current_user = (Object.keys(localStorage)[0]);
+
+if ( (Object.keys(localStorage).length) < 4 ){
+    current_user = (Object.keys(localStorage)[ Object.keys(localStorage).length - 1 ]);
+}
+if ( (Object.keys(localStorage).length) >= 4 ) {
+    current_user = ( Object.keys(localStorage)[0]);
+}
+ 
 var admin_data = JSON.parse(localStorage.getItem('admin'));
 var admin_name = admin_data.name;
 var admin_password = admin_data.password;
 var login_name, login_email, login_password;
 var last_login_name, last_login_password;
-var game_over, chance = 0, start_q, change_over;
+var game_over, chance = 0, start_q, change_over, step = 0;
 var r_n, confirming, user_score = 0, bot_score = 0;
 var email_v = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
-var user_status = false;
 /////////////////////////////////////////////////////////////////////////////////////////////////
 function forms(){
     document.write( "<div id=\"diva\">" );
@@ -87,6 +94,7 @@ function nav(){
 
 function score(){
     clearPage();
+    if ( step != 0 ) { nav(); }
     document.write( "<div id=\"diva\">" );
     document.write( "<div class='score'>" );
     document.write( "<h1 class=\"score__text\">" + `${user_score}:${bot_score}` + "</h1>" );
@@ -97,8 +105,6 @@ function score(){
 }
 
 function start_page() {
-    // check logged user
-
     document.write( "<div id=\"diva\">" );
     document.write( "<button id=\"start_signup\" class=\"start__signUp\">Sign Up</button>" );
     document.write( "<button id=\"start_signin\" class=\"start__signIn\">Sign In</button>" );
@@ -184,12 +190,10 @@ function sign_up(){
         new_user['email']      = login_email;
         new_user['password']   = login_password;
         new_user['date']       = current_date;
-        // save logged in user
         new_user['loggined']   = true;
         // ! u can set objects only json format to localStorage.
         storage.setItem( login_name, JSON.stringify( new_user ) );
         console.log( 'new user added!' );
-        user_status = JSON.parse( localStorage.getItem( login_name ) ).loggined;
         nav();
         start_game();
     }
@@ -201,8 +205,10 @@ function nav_remove() {
 
 function log_out() {
     // remove logged in user from storage
-    user_status = false;
-    nav_remove();
+    var change_status = JSON.parse(localStorage.getItem( current_user ));
+    change_status.loggined = false;
+    localStorage.setItem( current_user, JSON.stringify(change_status) );
+    nav_remove();clearPage();
 }
 
 function sign_in(){
@@ -227,13 +233,13 @@ function sign_in(){
         nav();
         console.log( 'OK!' );
         // username storage loged_user: aaaa
-        user_status = true;
+        var change_status = JSON.parse(localStorage.getItem( last_login_name ));
+        change_status.loggined = true;
+        localStorage.setItem( last_login_name, JSON.stringify(change_status) );
         start_game();
     } else { alert( "User not found!" ); }
 }
-// *for get keys from localStorage
-var keys_of_storage = Object.keys( localStorage );
-console.log( keys_of_storage );
+
 
 function remove_all(){ 
     localStorage.clear(); 
@@ -243,7 +249,7 @@ function remove_all(){
 function reset_score() { user_score = 0, bot_score = 0; }
 
 function congratulations(){
-    clearPage();
+    clearPage();  
     user_score++;
     document.write( "<div id=\"diva\">" );
     document.write( "<h1 class=\"animation-text\">" + `${r_n}` + "</h1>" );
@@ -255,6 +261,7 @@ function congratulations(){
 
 function fail(){
     clearPage();
+    if ( step != 0 ) { nav(); }
     bot_score++;
     document.write( "<div id=\"diva\">" );
     document.write( "<h1 class=\"animation-text\">" + `${r_n}` + "</h1>" );
@@ -274,8 +281,8 @@ function clearPage() {
 function start_game() {
     r_n         = Math.floor(Math.random()*100) + 1;
     game_over   = false;
+    console.log( r_n );
     while ( !game_over ) {
-        console.log( r_n );
         start_q     = Number( prompt( "Hello, I guessed one number you should find it out!" ) );
         change_over = chance++;
         if ( start_q == r_n ) { congratulations(); game_over = true; }
@@ -299,10 +306,22 @@ function resetGame() {
         start_game();
     }, 10);
 }
-if ( !user_status ) {
-    start_page();
+
+//////////////////////////////////////////////////////////////
+
+// *for get keys from localStorage
+var keys_of_storage = Object.keys( localStorage );
+console.log( keys_of_storage );
+
+function empty(){
+    document.write( "<div id=\"diva\">" );
+    document.write( "<div>       </div>" );
+    document.write( "</div>" );
 }
-else {
+
+if ( JSON.parse(localStorage.getItem(current_user)).loggined ) {
     login_name = current_user;
-    nav();
+    if ( step == 0 ) { nav();empty(); }
+    step ++;
 }
+else { start_page(); }
