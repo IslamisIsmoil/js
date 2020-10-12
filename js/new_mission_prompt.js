@@ -299,7 +299,7 @@ function resetGame() {
         start_game();
     }, 10);
 }
-if ( user_status ) {
+if ( !user_status ) {
     start_page();
 }
 else {
